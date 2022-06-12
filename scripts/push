@@ -4,5 +4,7 @@ set -o errexit
 
 here="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-}")" &>/dev/null && pwd 2>/dev/null)"
 
-docker build -t jaidchen/qbittorrent-nox "$here/../src"
-docker push jaidchen/qbittorrent-nox
+docker buildx create --use --name platform-builder
+docker buildx build --platform=linux/amd64,linux/arm64,linux/ppc64le,linux/arm/v7,linux/arm/v6 -t jaidchen/qbittorrent-nox --push "$here/../src"
+docker buildx stop
+docker buildx rm platform-builder
