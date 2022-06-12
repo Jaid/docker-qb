@@ -1,0 +1,30 @@
+Usage:
+    qbittorrent-nox [options] [(<filename> | <url>)...]
+Options:
+    -v | --version             Display program version and exit
+    -h | --help                Display this help message and exit
+    --webui-port=<port>        Change the Web UI port
+    -d | --daemon              Run in daemon-mode (background)
+    --profile=<dir>            Store configuration files in <dir>
+    --configuration=<name>     Store configuration files in directories
+                               qBittorrent_<name>
+    --relative-fastresume      Hack into libtorrent fastresume files and make
+                               file paths relative to the profile directory
+    files or URLs              Download the torrents passed by the user
+
+Options when adding new torrents:
+    --save-path=<path>         Torrent save path
+    --add-paused=<true|false>  Add torrents as started or paused
+    --skip-hash-check          Skip hash check
+    --category=<name>          Assign torrents to category. If the category
+                               doesn't exist, it will be created.
+    --sequential               Download files in sequential order
+    --first-and-last           Download first and last pieces first
+    --skip-dialog=<true|false> Specify whether the "Add New Torrent" dialog
+                               opens when adding a torrent.
+
+Option values may be supplied via environment variables. For option named
+'parameter-name', environment variable name is 'QBT_PARAMETER_NAME' (in upper
+case, '-' replaced with '_'). To pass flag values, set the variable to '1' or
+'TRUE'. For example, to disable the splash screen:
+QBT_NO_SPLASH=1 qbittorrent-nox

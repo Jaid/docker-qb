@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+set -o errexit
+
+here="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-}")" &>/dev/null && pwd 2>/dev/null)"
+
+docker build -t jaidchen/qbittorrent-nox "$here/../src"
+docker push jaidchen/qbittorrent-nox

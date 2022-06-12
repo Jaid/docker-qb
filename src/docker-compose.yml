@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  app:
+    container_name: qbittorrent-nox
+    restart: unless-stopped
+    build:
+      context: .
+      args:
+        webPort: 3649
+        directPort: 33333
+    ports:
+      - 3649:3649
+      - 33333:33333
+    volumes:
+      - ../dist/dockerVolume/config:/home/app/qBittorrent
+      - ../dist/dockerVolume/finished:/home/app/content/finished
+      - ../dist/dockerVolume/downloading:/home/app/content/downloading
+      - ../dist/dockerVolume/torrentBackup:/home/app/content/torrentBackup
+      - ../dist/dockerVolume/inbox:/home/app/content/inbox
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+        max-file: "3"

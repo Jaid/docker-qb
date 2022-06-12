@@ -1,2 +1,3 @@
 # docker-qbittorrent-nox
-Docker image to quickly setup qbittorrent-nox on my Pi.
+
+[![dockeri.co](https://dockeri.co/image/jaidchen/node-app)](https://hub.docker.com/r/jaidchen/node-app)
