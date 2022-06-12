@@ -2,17 +2,17 @@ version: "3.9"
 services:
   app:
     container_name: qbittorrent-nox
-    restart: unless-stopped
+    restart: no
     image: jaidchen/qbittorrent-nox:latest
     ports:
       - 3649:3649
       - 33333:33333
     volumes:
-      - ../dist/dockerVolume/config:/home/app/qBittorrent
-      - ../dist/dockerVolume/finished:/home/app/content/finished
-      - ../dist/dockerVolume/downloading:/home/app/content/downloading
-      - ../dist/dockerVolume/torrentBackup:/home/app/content/torrentBackup
-      - ../dist/dockerVolume/inbox:/home/app/content/inbox
+      - ./config:/home/app/qBittorrent
+      - ./finished:/home/app/content/finished
+      - ./downloading:/home/app/content/downloading
+      - ./torrentBackup:/home/app/content/torrentBackup
+      - ./inbox:/home/app/content/inbox
     logging:
       driver: json-file
       options:
