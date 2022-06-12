@@ -3,8 +3,7 @@ services:
   app:
     container_name: qbittorrent-nox
     restart: unless-stopped
-    build:
-      context: .
+    image: jaidchen/qbittorrent-nox:latest
     ports:
       - 3649:3649
       - 33333:33333
