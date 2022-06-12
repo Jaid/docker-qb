@@ -1,5 +1,6 @@
 # dotenv
 .env
+!/prod/.env
 
 # Generated or temporary content
 dist
