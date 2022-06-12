@@ -38,4 +38,4 @@ VOLUME /home/$userName/content/downloading
 VOLUME /home/$userName/content/inbox
 VOLUME /home/$userName/content/torrentBackup
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl --head --fail "localhost:3649" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl --head --fail "localhost:$webPort" || exit 1
