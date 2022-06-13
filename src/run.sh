@@ -16,7 +16,7 @@ if nc -z localhost 8000; then
   fi
   gluetunIp=$(curl --retry 20 localhost:8000/v1/publicip/ip | jq --raw-output .ip)
   echo "Using VPN ip $gluetunIp"
-  gluetunForwardedPort=$(curl localhost:8000/v1/openvpn/portforwarded | jq --raw-output .port)
+  gluetunForwardedPort=$(curl --retry 20 localhost:8000/v1/openvpn/portforwarded | jq --raw-output .port)
   echo "Dynamically setting port to $gluetunForwardedPort"
   if [ -f "$qbittorrentConf" ]; then
     echo "$qbittorrentConf already exists, patching file"
