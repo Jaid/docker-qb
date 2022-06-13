@@ -1,8 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env ash
 set -e
 set -o errexit
 
-echo "Running run.sh"
+echo "Running run.ash"
 
 qbittorrentConf="$qbittorrentFolder/config/qBittorrent.conf"
 

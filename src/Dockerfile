@@ -28,11 +28,11 @@ ENV torrentBackupPath=/home/$userName/content/torrentBackup
 EXPOSE $webPort
 EXPOSE $directPort
 
-COPY --chown=$userId:$groupId ./run.sh /home/$userName/bin/run.sh
+COPY --chown=$userId:$groupId ./run.ash /home/$userName/bin/run.ash
 
 WORKDIR /home/$userName
 
-CMD sh /home/$qbittorrentUser/bin/run.sh
+CMD ash /home/$qbittorrentUser/bin/run.ash
 
 VOLUME /home/$userName/qBittorrent
 VOLUME /home/$userName/content/finished
