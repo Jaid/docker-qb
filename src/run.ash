@@ -6,6 +6,42 @@ echo "Running run.ash"
 
 qbittorrentConf="$qbittorrentFolder/config/qBittorrent.conf"
 
+# from https://unix.stackexchange.com/a/137639
+retry() {
+  local n=1
+  local max=10
+  local delay=10
+  while true; do
+    "$@" && break || {
+      if [ $n -lt $max ]; then
+        n=$((n + 1))
+        echo "Command failed. Attempt $n/$max:"
+        sleep $delay
+      else
+        fail "The command has failed after $n attempts."
+      fi
+    }
+  done
+}
+
+getPublicIp() {
+  gluetunIp=$(curl --retry 20 localhost:8000/v1/publicip/ip | jq --raw-output .ip)
+  if [ -z "$gluetunIp" ] || [ "$gluetunIp" -eq 0 ]; then
+    return 1
+  else
+    export gluetunIp
+  fi
+}
+
+getForwardedPort() {
+  gluetunForwardedPort=$(curl --retry 20 localhost:8000/v1/openvpn/portforwarded | jq --raw-output .port)
+  if [ -z "$gluetunForwardedPort" ] || [ "$gluetunForwardedPort" -eq 0 ]; then
+    return 1
+  else
+    export gluetunForwardedPort
+  fi
+}
+
 if nc -z localhost 8000; then
   echo 'Found gluetun instance'
   if ! command -v curl >/dev/null 2>&1; then
@@ -16,15 +52,15 @@ if nc -z localhost 8000; then
     echo "jq not installed, running: apk add jq"
     apk add --no-cache jq
   fi
-  gluetunIp=$(curl --retry 20 localhost:8000/v1/publicip/ip | jq --raw-output .ip)
+  retry getPublicIp
   echo "Using VPN ip $gluetunIp"
-  gluetunForwardedPort=$(curl --retry 20 localhost:8000/v1/openvpn/portforwarded | jq --raw-output .port)
+  retry getForwardedPort
   echo "Dynamically setting port to $gluetunForwardedPort"
   if [ -f "$qbittorrentConf" ]; then
     echo "$qbittorrentConf already exists, patching file"
     md5Before=$(md5sum "$qbittorrentConf")
     echo "MD5 before: $md5Before"
-    sed -i "s|^Session\\\\Port=.*$|Session\\\\Port=$directPort|g" "$qbittorrentConf"
+    sed -i "s|^Session\\\\Port=.*$|Session\\\\Port=$gluetunForwardedPort|g" "$qbittorrentConf"
     sed -i "s|^Session\\\\Interface=.*$|Session\\\\Interface=tunVpn|g" "$qbittorrentConf"
     sed -i "s|^Session\\\\InterfaceName=.*$|Session\\\\InterfaceName=tunVpn|g" "$qbittorrentConf"
     md5After=$(md5sum "$qbittorrentConf")
