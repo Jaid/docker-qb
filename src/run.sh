@@ -2,7 +2,35 @@
 set -e
 set -o errexit
 
-if [ ! -f "$qbittorrentFolder/config/qBittorrent.conf" ]; then
+echo "Running run.sh"
+
+qbittorrentConf="$qbittorrentFolder/config/qBittorrent.conf"
+
+if nc -z localhost 8000; then
+  echo 'Found gluetun instance'
+  apk add curl jq
+  gluetunIp=$(curl localhost:8000/v1/publicip/ip | jq --raw-output .ip)
+  echo "Using VPN ip $gluetunIp"
+  gluetunForwardedPort=$(curl localhost:8000/v1/openvpn/portforwarded | jq --raw-output .port)
+  echo "Dynamically setting port to $gluetunForwardedPort"
+  if [ -f "$qbittorrentConf" ]; then
+    echo "$qbittorrentConf already exists, patching file"
+    md5Before=$(md5sum "$qbittorrentConf")
+    echo "MD5 before: $md5Before"
+    sed -i "s|^Session\\\\Port=.*$|Session\\\\Port=$directPort|g" "$qbittorrentConf"
+    sed -i "s|^Session\\\\Interface=.*$|Session\\\\Interface=tunVpn|g" "$qbittorrentConf"
+    sed -i "s|^Session\\\\InterfaceName=.*$|Session\\\\InterfaceName=tunVpn|g" "$qbittorrentConf"
+    md5After=$(md5sum "$qbittorrentConf")
+    echo "MD5 after:  $md5Before"
+  else
+    # Just overwrite the env vars
+    export directPort="$gluetunForwardedPort"
+    export limitToInterface=tunVpn
+  fi
+fi
+
+if [ ! -f "$qbittorrentConf" ]; then
+  echo "Config file $qbittorrentConf does not exist yet, will be dynamically created"
   mkdir --parents "$qbittorrentFolder/config"
   echo "[Application]
 FileLogger\Age=1
@@ -26,7 +54,8 @@ Session\DisableAutoTMMByDefault=false
 Session\DisableAutoTMMTriggers\CategoryChanged=false
 Session\DisableAutoTMMTriggers\CategorySavePathChanged=false
 Session\DisableAutoTMMTriggers\DefaultSavePathChanged=false
-Session\InterfaceName=
+Session\Interface=$limitToInterface
+Session\InterfaceName=$limitToInterface
 Session\LSDEnabled=false
 Session\MaxConnections=50
 Session\MaxConnectionsPerTorrent=-1
@@ -130,9 +159,12 @@ WebUI\UseUPnP=false
 
 [ShutdownConfirmDlg]
 DontConfirmAutoExit=false
-" >"$qbittorrentFolder/config/qBittorrent.conf"
+" >"$qbittorrentConf"
 
-  chown --recursive app:app /home/app
+  md5Sum=$(md5sum "$qbittorrentConf")
+  echo "MD5: $md5Sum"
+
+  chown --recursive "$qbittorrentUser:$qbittorrentUser" "/home/$qbittorrentUser"
 fi
 
 su -c "qbittorrent-nox --profile=\"\$HOME\"" app

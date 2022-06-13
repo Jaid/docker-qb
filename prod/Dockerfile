@@ -2,8 +2,6 @@
 
 FROM alpine:3.16
 
-# curl for HEALTHCHECK
-RUN apk add --no-cache curl
 RUN apk add --no-cache qbittorrent-nox
 
 ARG userName=app
@@ -19,6 +17,7 @@ ENV qbittorrentFolder=/home/$userName/qBittorrent
 ENV qbittorrentUser=$userName
 ENV webUser=admin
 ENV webPort=3649
+ENV limitToInterface=eth0
 ENV directPort=33333
 ENV webPasswordPbkdf2="KOhefdma+6Y9jh0NRrvmDA==:D9Qi3a/yoqFrpUCpd00ufqLbzVRRmFTTuuKx6HYY0NiRVVcw1lphedyjkzGsMwvlAgayHMqqXW3gl64hec1OXg=="
 ENV startSlow=true
