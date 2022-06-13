@@ -8,10 +8,10 @@ qbittorrentConf="$qbittorrentFolder/config/qBittorrent.conf"
 
 if nc -z localhost 8000; then
   echo 'Found gluetun instance'
-  if command -v curl >/dev/null 2>&1; then
+  if ! command -v curl >/dev/null 2>&1; then
     apk add curl
   fi
-  if command -v jq >/dev/null 2>&1; then
+  if ! command -v jq >/dev/null 2>&1; then
     apk add jq
   fi
   gluetunIp=$(curl --retry 20 localhost:8000/v1/publicip/ip | jq --raw-output .ip)
