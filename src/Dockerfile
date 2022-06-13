@@ -2,8 +2,6 @@
 
 FROM alpine:3.16
 
-# curl for HEALTHCHECK
-RUN apk add --no-cache curl
 RUN apk add --no-cache qbittorrent-nox
 
 ARG userName=app
