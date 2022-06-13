@@ -9,11 +9,11 @@ services:
       gluetun:
         condition: service_healthy
     volumes:
-      - ../dist/dockerVolume/config:/home/app/qBittorrent
-      - ../dist/dockerVolume/finished:/home/app/content/finished
-      - ../dist/dockerVolume/downloading:/home/app/content/downloading
-      - ../dist/dockerVolume/torrentBackup:/home/app/content/torrentBackup
-      - ../dist/dockerVolume/inbox:/home/app/content/inbox
+      - ./dockerVolume/config:/home/app/qBittorrent
+      - ./dockerVolume/finished:/home/app/content/finished
+      - ./dockerVolume/downloading:/home/app/content/downloading
+      - ./dockerVolume/torrentBackup:/home/app/content/torrentBackup
+      - ./dockerVolume/inbox:/home/app/content/inbox
     logging:
       driver: json-file
       options:
