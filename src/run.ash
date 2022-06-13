@@ -26,7 +26,7 @@ retry() {
 
 getPublicIp() {
   gluetunIp=$(curl --retry 20 localhost:8000/v1/publicip/ip | jq --raw-output .ip)
-  if [ -z "$gluetunIp" ] || [ "$gluetunIp" -eq 0 ]; then
+  if [ -z "$gluetunIp" ] || [ "$gluetunIp" = "null" ]; then
     return 1
   else
     export gluetunIp
@@ -35,7 +35,7 @@ getPublicIp() {
 
 getForwardedPort() {
   gluetunForwardedPort=$(curl --retry 20 localhost:8000/v1/openvpn/portforwarded | jq --raw-output .port)
-  if [ -z "$gluetunForwardedPort" ] || [ "$gluetunForwardedPort" -eq 0 ]; then
+  if [ -z "$gluetunForwardedPort" ] || [ "$gluetunForwardedPort" = "null" ] || [ "$gluetunForwardedPort" -eq 0 ]; then
     return 1
   else
     export gluetunForwardedPort
