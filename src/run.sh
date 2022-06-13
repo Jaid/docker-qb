@@ -9,10 +9,12 @@ qbittorrentConf="$qbittorrentFolder/config/qBittorrent.conf"
 if nc -z localhost 8000; then
   echo 'Found gluetun instance'
   if ! command -v curl >/dev/null 2>&1; then
-    apk add curl
+    echo "jq not installed, running: apk add curl"
+    apk add --no-cache curl
   fi
   if ! command -v jq >/dev/null 2>&1; then
-    apk add jq
+    echo "jq not installed, running: apk add jq"
+    apk add --no-cache jq
   fi
   gluetunIp=$(curl --retry 20 localhost:8000/v1/publicip/ip | jq --raw-output .ip)
   echo "Using VPN ip $gluetunIp"
