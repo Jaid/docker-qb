@@ -21,7 +21,7 @@ if nc -z localhost 8000; then
     sed -i "s|^Session\\\\Interface=.*$|Session\\\\Interface=tunVpn|g" "$qbittorrentConf"
     sed -i "s|^Session\\\\InterfaceName=.*$|Session\\\\InterfaceName=tunVpn|g" "$qbittorrentConf"
     md5After=$(md5sum "$qbittorrentConf")
-    echo "MD5 after:  $md5Before"
+    echo "MD5 after:  $md5After"
   else
     # Just overwrite the env vars
     export directPort="$gluetunForwardedPort"
