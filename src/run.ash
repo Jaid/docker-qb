@@ -27,7 +27,7 @@ retry() {
 getPublicIp() {
   gluetunIp=$(curl --retry 20 localhost:8000/v1/publicip/ip | jq --raw-output .ip)
   if [ -z "$gluetunIp" ] || [ "$gluetunIp" = "null" ]; then
-    return 1
+    return
   else
     export gluetunIp
   fi
@@ -55,7 +55,11 @@ if nc -z localhost 8000; then
     retry apk add jq
   fi
   retry getPublicIp
-  echo "Using VPN ip $gluetunIp"
+  if [ -n "$gluetunIp" ]; then
+    echo "Using VPN ip $gluetunIp"
+  else
+    echo "Could not determine public IP address using gluetun API /v1/publicip/ip"
+  fi
   retry getForwardedPort
   echo "Dynamically setting port to $gluetunForwardedPort"
   if [ -f "$qbittorrentConf" ]; then
