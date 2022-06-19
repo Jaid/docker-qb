@@ -46,11 +46,13 @@ if nc -z localhost 8000; then
   echo 'Found gluetun instance'
   if ! command -v curl >/dev/null 2>&1; then
     echo "jq not installed, running: apk add curl"
-    retry apk add --no-cache curl
+    retry apk update
+    retry apk add curl
   fi
   if ! command -v jq >/dev/null 2>&1; then
     echo "jq not installed, running: apk add jq"
-    retry apk add --no-cache jq
+    retry apk update
+    retry apk add jq
   fi
   retry getPublicIp
   echo "Using VPN ip $gluetunIp"
