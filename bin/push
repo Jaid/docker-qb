@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 set -o errexit
 
 here="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-}")" &>/dev/null && pwd 2>/dev/null)"

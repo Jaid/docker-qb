@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-set -e
 set -o errexit
 
 here="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-}")" &>/dev/null && pwd 2>/dev/null)"
 
+rm -rf dist
 docker compose --file "$here/../src/docker-compose.yml" up --build
+docker compose --file "$here/../src/docker-compose.yml" run -it --rm app bash
