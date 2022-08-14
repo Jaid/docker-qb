@@ -4,10 +4,10 @@ FROM alpine:3.16.2
 
 RUN apk add --no-cache qbittorrent-nox
 
-ARG userName=app
-ARG groupName=$userName
-ARG userId=1000
-ARG groupId=1000
+ENV userName=app
+ENV groupName=app
+ENV userId=1000
+ENV groupId=1000
 
 # https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#non-root-user
 RUN addgroup -S --gid $groupId $groupName
