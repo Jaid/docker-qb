@@ -1,20 +1,20 @@
-#!/usr/bin/env ash
+#!/usr/bin/env bash
 set -e
 set -o errexit
 
-echo "Running run.ash"
+echo "Starting run script"
 
 qbittorrentConf="$qbittorrentFolder/config/qBittorrent.conf"
 
 # from https://unix.stackexchange.com/a/137639
-retry() {
+function retry() {
   local n=1
   local max=10
   local delay=10
   while true; do
     "$@" && break || {
       if [ $n -lt $max ]; then
-        n=$((n + 1))
+        ((n++)) || true
         echo "Command failed. Attempt $n/$max:"
         sleep $delay
       else
@@ -24,7 +24,7 @@ retry() {
   done
 }
 
-getPublicIp() {
+function getPublicIp() {
   gluetunIp=$(curl --retry 20 localhost:8000/v1/publicip/ip | jq --raw-output .ip)
   if [ -z "$gluetunIp" ] || [ "$gluetunIp" = "null" ]; then
     return
@@ -33,7 +33,7 @@ getPublicIp() {
   fi
 }
 
-getForwardedPort() {
+function getForwardedPort() {
   gluetunForwardedPort=$(curl --retry 20 localhost:8000/v1/openvpn/portforwarded | jq --raw-output .port)
   if [ -z "$gluetunForwardedPort" ] || [ "$gluetunForwardedPort" = "null" ] || [ "$gluetunForwardedPort" -eq 0 ]; then
     return 1

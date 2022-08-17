@@ -2,7 +2,7 @@
 
 FROM alpine:3.16.2
 
-RUN apk add --no-cache qbittorrent-nox
+RUN apk add --no-cache bash qbittorrent-nox
 
 ENV userName=app
 ENV groupName=app
@@ -28,11 +28,11 @@ ENV torrentBackupPath=/home/$userName/content/torrentBackup
 EXPOSE $webPort
 EXPOSE $directPort
 
-COPY --chown=$userId:$groupId ./run.ash /home/$userName/bin/run.ash
+COPY --chown=$userId:$groupId ./run /home/$userName/bin/run
 
 WORKDIR /home/$userName
 
-CMD ash /home/$qbittorrentUser/bin/run.ash
+CMD bash /home/$qbittorrentUser/bin/run
 
 VOLUME /home/$userName/qBittorrent
 VOLUME /home/$userName/content/finished
