@@ -51,6 +51,7 @@ jobs:
             org.opencontainers.image.vendor=${{ github.actor }}
             org.opencontainers.image.title=${{ steps.dockerHubRef.outputs.shortName }}
           tags: |
+            type=ref,event=branch
             type=edge,branch=$repo.default_branch
             type=schedule,pattern=nightly
             type=schedule,pattern={{date 'YYYYMMDD'}}
