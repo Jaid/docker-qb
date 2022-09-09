@@ -2,7 +2,10 @@
 
 FROM jaidchen/ubuntu:main
 
-RUN mkdir $userHome/{bin,qBittorrent,content,media}
+RUN mkdir $userHome/bin
+RUN mkdir $userHome/qBittorrent
+RUN mkdir $userHome/content
+RUN mkdir $userHome/media
 COPY ./bin $userHome/bin
 RUN chown --recursive $userId:$groupId $userHome
 
