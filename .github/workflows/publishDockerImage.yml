@@ -7,7 +7,7 @@ jobs:
       - name: Set name
         id: nameSetter
         shell: bash
-        run: echo '::set-output name=imageName::abc'
+        run: repoName=${{ github.event.repository.name }} && printf '::set-output name=imageName::%s\n' ${repoName##docker-}
       - name: Get name
         run: echo ${{ steps.nameSetter.outputs.imageName }}
       # - name: Set up QEMU
