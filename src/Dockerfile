@@ -2,7 +2,9 @@
 
 FROM jaidchen/ubuntu:main
 
-COPY --chown=$userId:$groupId ./bin $userHome/bin
+RUN mkdir $userHome/{bin,qBittorrent,content,media}
+COPY ./bin $userHome/bin
+RUN chown --recursive $userId:$groupId $userHome
 
 ENV qbittorrentFolder=$userHome/qBittorrent
 ENV qbittorrentUser=$userName

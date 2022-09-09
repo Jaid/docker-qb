@@ -199,7 +199,7 @@ DontConfirmAutoExit=false
 
   md5Sum=$(md5sum "$qbittorrentConf")
   echo "MD5: $md5Sum"
-  chown --recursive "$qbittorrentUser:$qbittorrentUser" "$userHome"
+  chown --recursive "$userId:$groupId" "$userHome"
 fi
 
-su -c "qbittorrent-nox --profile=\"\$HOME\"" app
+su --group "$groupName" --command "qbittorrent-nox --profile=\"\$HOME\"" "$userName"
