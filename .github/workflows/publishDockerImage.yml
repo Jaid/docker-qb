@@ -5,10 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set name
+        id: nameSetter
         shell: bash
         run: echo '::set-output name=imageName::abc'
       - name: Get name
-        run: echo ${{ steps.vars.outputs.imageName }}
+        run: echo ${{ steps.nameSetter.outputs.imageName }}
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v2
       # - name: Set up Docker Buildx
