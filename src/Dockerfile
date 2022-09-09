@@ -3,13 +3,22 @@
 FROM ubuntu:kinetic
 
 ENV userName=app
-ENV groupName=app
+ENV groupName=$userName
 ENV userId=1000
-ENV groupId=1000
+ENV groupId=$userId
 
 # https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#non-root-user
 RUN addgroup --system --gid $groupId $groupName
 RUN adduser --disabled-password --gecos '' --uid $userId --ingroup $groupName --home /home/$userName --shell /bin/bash $userName
+
+WORKDIR /home/$userName
+ENV debugBash=false
+
+COPY --chown=$userId:$groupId ./bin /home/$userName/bin
+
+RUN apt-get --option Acquire::Retries=60 --option Acquire::http::Timeout=180 --yes --quiet update
+RUN apt-get --option Acquire::Retries=60 --option Acquire::http::Timeout=180 --yes --quiet upgrade
+RUN apt-get --option Acquire::Retries=60 --option Acquire::http::Timeout=180 --yes --quiet autoremove
 
 ENV qbittorrentFolder=/home/$userName/qBittorrent
 ENV qbittorrentUser=$userName
@@ -26,12 +35,8 @@ ENV torrentBackupPath=/home/$userName/content/torrentBackup
 EXPOSE $webPort
 EXPOSE $directPort
 
-COPY --chown=$userId:$groupId ./bin /home/$userName/bin
+RUN apt-get --option Acquire::Retries=60 --option Acquire::http::Timeout=180 --yes --quiet install curl jq qbittorrent-nox
 
-WORKDIR /home/$userName
-
-ENV debugBash=false
-RUN bash /home/$qbittorrentUser/bin/installDependencies.bash curl jq qbittorrent-nox
 CMD bash /home/$qbittorrentUser/bin/run.bash
 
 VOLUME /home/$userName/qBittorrent
