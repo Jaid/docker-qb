@@ -24,7 +24,15 @@ jobs:
       - name: Set name
         id: nameSetter
         shell: bash
-        run: repoName=${{ github.event.repository.name }} && printf '::set-output name=imageName::%s\n' ${repoName##docker-}
+        run: |
+          set -o errexit
+          repoName=${{ github.event.repository.name }}
+          if [ ${{ matrix.registry = docker.io }} ]; then
+            imageNamePrefix=${{ matrix.username }}/
+          else
+            imageNamePrefix=
+          fi
+          printf '::set-output name=imageName::%s%s\n' $imageNamePrefix ${repoName##docker-}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -41,6 +49,6 @@ jobs:
           push: true
           file: ${{ env.dockerFile }}
           platforms: ${{ env.arch }}
-          tags: ${{ matrix.username }}/${{ steps.nameSetter.outputs.imageName }}:latest
-          cache-from: type=registry,ref=${{ matrix.username }}/${{ steps.nameSetter.outputs.imageName }}:buildcache
-          cache-to: type=registry,ref=${{ matrix.username }}/${{ steps.nameSetter.outputs.imageName }}:buildcache,mode=max
+          tags: ${{ steps.nameSetter.outputs.imageName }}:latest
+          cache-from: type=registry,ref=${{ steps.nameSetter.outputs.imageName }}:buildcache
+          cache-to: type=registry,ref=${{ steps.nameSetter.outputs.imageName }}:buildcache,mode=max
