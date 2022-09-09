@@ -1,5 +1,6 @@
 version: "3.9"
 services:
+
   app:
     container_name: qbittorrent-nox
     restart: unless-stopped
@@ -9,13 +10,18 @@ services:
       - 3649:3649
       - 33333:33333
     volumes:
-      - ../dist/dockerVolume/config:/home/app/qBittorrent
-      - ../dist/dockerVolume/finished:/home/app/content/finished
-      - ../dist/dockerVolume/downloading:/home/app/content/downloading
-      - ../dist/dockerVolume/torrentBackup:/home/app/content/torrentBackup
-      - ../dist/dockerVolume/inbox:/home/app/content/inbox
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
-        max-file: "3"
+      - type: bind
+        source: ../dist/dockerVolume/config
+        target: /home/app/qBittorrent
+      - type: bind
+        source: ../dist/dockerVolume/finished
+        target: /home/app/content/finished
+      - type: bind
+        source: ../dist/dockerVolume/downloading
+        target: /home/app/content/downloading
+      - type: bind
+        source: ../dist/dockerVolume/torrentBackup
+        target: /home/app/content/torrentBackup
+      - type: bind
+        source: ../dist/dockerVolume/inbox
+        target: /home/app/content/inbox

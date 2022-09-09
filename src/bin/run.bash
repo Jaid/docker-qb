@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -o errexit
 
+if [ "$debugBash" ]; then
+  set -o xtrace
+fi
+
 echo "Starting run script"
 
 qbittorrentConf="$qbittorrentFolder/config/qBittorrent.conf"
@@ -43,16 +47,6 @@ function getForwardedPort() {
 
 if nc -z localhost 8000; then
   echo 'Found gluetun instance'
-  if ! command -v curl >/dev/null 2>&1; then
-    echo "jq not installed, running: apk add curl"
-    retry apk update
-    retry apk add curl
-  fi
-  if ! command -v jq >/dev/null 2>&1; then
-    echo "jq not installed, running: apk add jq"
-    retry apk update
-    retry apk add jq
-  fi
   retry getPublicIp
   if [ -n "$gluetunIp" ]; then
     echo "Using VPN ip $gluetunIp"
@@ -65,9 +59,9 @@ if nc -z localhost 8000; then
     echo "$qbittorrentConf already exists, patching file"
     md5Before=$(md5sum "$qbittorrentConf")
     echo "MD5 before: $md5Before"
-    sed -i "s|^Session\\\\Port=.*$|Session\\\\Port=$gluetunForwardedPort|g" "$qbittorrentConf"
-    sed -i "s|^Session\\\\Interface=.*$|Session\\\\Interface=tunVpn|g" "$qbittorrentConf"
-    sed -i "s|^Session\\\\InterfaceName=.*$|Session\\\\InterfaceName=tunVpn|g" "$qbittorrentConf"
+    sed -i "s░^Session\\\\Port=.*$░Session\\\\Port=$gluetunForwardedPort░g" "$qbittorrentConf"
+    sed -i "s░^Session\\\\Interface=.*$░Session\\\\Interface=tunVpn░g" "$qbittorrentConf"
+    sed -i "s░^Session\\\\InterfaceName=.*$░Session\\\\InterfaceName=tunVpn░g" "$qbittorrentConf"
     md5After=$(md5sum "$qbittorrentConf")
     echo "MD5 after:  $md5After"
   else
