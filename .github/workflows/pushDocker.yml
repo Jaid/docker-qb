@@ -11,39 +11,36 @@ env:
 jobs:
   job:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     strategy:
       matrix:
         include:
           - registry: docker.io
             username: jaidchen
+            imageName: jaidchen/$repo
             passwordId: dockerHubToken
           - registry: ghcr.io
+            imageName: $repo
             username: ${{ github.actor }}
             passwordId: GITHUB_TOKEN
     steps:
       - name: Set name
         id: nameSetter
         shell: bash
-        run: |
-          set -o errexit
-          repoName=${{ github.event.repository.name }}
-          if [ ${{ matrix.registry }} = docker.io ]; then
-            imageNamePrefix=${{ matrix.username }}/
-          else
-            imageNamePrefix=
-          fi
-          printf '::set-output name=imageName::%s%s\n' $imageNamePrefix ${repoName##docker-}
-      - name: Set up QEMU
+        run: repoName=${{ github.event.repository.name }} && repo=${repoName##docker-} && printf '::set-output name=imageName::%s' ${{ matrix.imageName }}
+      - name: Set up qemu
         uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
+      - name: Set up buildx
         uses: docker/setup-buildx-action@v2
-      - name: Login to DockerHub
+      - name: Login to ${{ matrix.registry }}
         uses: docker/login-action@v2
         with:
           registry: ${{ matrix.registry }}
           username: ${{ matrix.username }}
           password: ${{ secrets[matrix.passwordId] }}
-      - name: Build and push Docker to ${{ matrix.registry }}
+      - name: Build and push to ${{ matrix.registry }}
         uses: docker/build-push-action@v3
         with:
           push: true
