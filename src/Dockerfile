@@ -1,8 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM alpine:3.16.2
-
-RUN apk add --no-cache bash qbittorrent-nox
+FROM ubuntu:22.10
 
 ENV userName=app
 ENV groupName=app
@@ -10,8 +8,8 @@ ENV userId=1000
 ENV groupId=1000
 
 # https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#non-root-user
-RUN addgroup -S --gid $groupId $groupName
-RUN adduser --disabled-password --gecos '' --uid $userId --ingroup $groupName --home /home/$userName --shell /bin/sh $userName
+RUN addgroup --system --gid $groupId $groupName
+RUN adduser --disabled-password --gecos '' --uid $userId --ingroup $groupName --home /home/$userName --shell /bin/bash $userName
 
 ENV qbittorrentFolder=/home/$userName/qBittorrent
 ENV qbittorrentUser=$userName
@@ -28,11 +26,13 @@ ENV torrentBackupPath=/home/$userName/content/torrentBackup
 EXPOSE $webPort
 EXPOSE $directPort
 
-COPY --chown=$userId:$groupId ./run /home/$userName/bin/run
+COPY --chown=$userId:$groupId ./bin /home/$userName/bin
 
 WORKDIR /home/$userName
 
-CMD bash /home/$qbittorrentUser/bin/run
+ENV debugBash=false
+RUN bash /home/$qbittorrentUser/bin/installDependencies.bash curl jq qbittorrent-nox
+CMD bash /home/$qbittorrentUser/bin/run.bash
 
 VOLUME /home/$userName/qBittorrent
 VOLUME /home/$userName/content/finished
