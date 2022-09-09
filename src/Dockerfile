@@ -26,6 +26,7 @@ ENV gluetunApiPort=8000
 EXPOSE $webPort
 EXPOSE $directPort
 
+RUN apt-get --option Acquire::Retries=60 --option Acquire::http::Timeout=180 --yes --quiet update
 RUN apt-get --option Acquire::Retries=60 --option Acquire::http::Timeout=180 --yes --quiet install curl jq qbittorrent-nox
 
 CMD bash $userHome/bin/run.bash
