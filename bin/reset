@@ -4,4 +4,4 @@ set -o errexit
 here="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-}")" &>/dev/null && pwd 2>/dev/null)"
 
 rm -rf "$here"/../dist
-mkdir --parents "$here"/../dist/dockerVolume/{config,finished,inbox,downloading,torrentBackup}
+mkdir --parents "$here"/../dist/dockerVolume/{config,content,media}
