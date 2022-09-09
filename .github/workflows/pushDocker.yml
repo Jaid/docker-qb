@@ -8,44 +8,61 @@ on:
 env:
   arch: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x
   dockerFile: src/Dockerfile
+  dockerHubUser: jaidchen
+  dockerHubRegistry: docker.io
+  githubRegistry: ghcr.io
 jobs:
   job:
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
-    strategy:
-      matrix:
-        include:
-          - registry: docker.io
-            username: jaidchen
-            imageName: jaidchen/$repo
-            passwordId: dockerHubToken
-          - registry: ghcr.io
-            imageName: ${{ github.event.repository.full_name }}
-            username: ${{ github.actor }}
-            passwordId: GITHUB_TOKEN
     steps:
       - name: Set name
-        id: nameSetter
+        id: dockerHubRef
         shell: bash
-        run: repoName=${{ github.event.repository.name }} && repo=${repoName##docker-} && printf '::set-output name=imageName::%s' ${{ matrix.imageName }}
+        run: repoName=${{ github.event.repository.name }} && shortName=${repoName##docker-} && printf '::set-output name=ref::%s/%s\n::set-output name=shortName::%s' ${{ env.dockerHubUser }} $shortName $shortName
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Set up qemu
         uses: docker/setup-qemu-action@v2
       - name: Set up buildx
         uses: docker/setup-buildx-action@v2
-      - name: Login to ${{ matrix.registry }}
+      - name: Login to ${{ env.dockerHubRegistry }}
         uses: docker/login-action@v2
         with:
-          registry: ${{ matrix.registry }}
-          username: ${{ matrix.username }}
-          password: ${{ secrets[matrix.passwordId] }}
-      - name: Build and push to ${{ matrix.registry }}
+          username: ${{ env.dockerHubUser }}
+          password: ${{ secrets.dockerHubToken }}
+      - name: Login to ${{ env.githubRegistry }}
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.githubRegistry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v4.0.1
+        with:
+          images: |
+            ${{ env.githubRegistry }}/${{ github.repository }}
+            ${{ steps.dockerHubRef.outputs.ref }}
+          labels: |
+            maintainer=${{ github.actor }}
+            org.opencontainers.image.vendor=${{ github.actor }}
+            org.opencontainers.image.title=${{ steps.dockerHubRef.outputs.shortName }}
+          tags: |
+            type=edge,branch=$repo.default_branch
+            type=schedule,pattern=nightly
+            type=schedule,pattern={{date 'YYYYMMDD'}}
+            type=sha,format=long
+            type=raw,value=edge
+      - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
           file: ${{ env.dockerFile }}
           platforms: ${{ env.arch }}
-          tags: ${{ steps.nameSetter.outputs.imageName }}:latest
-          cache-from: type=registry,ref=${{ steps.nameSetter.outputs.imageName }}:buildcache
-          cache-to: type=registry,ref=${{ steps.nameSetter.outputs.imageName }}:buildcache,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ steps.dockerHubRef.outputs.ref }}:buildcache
+          cache-to: type=registry,ref=${{ steps.dockerHubRef.outputs.ref }}:buildcache,mode=max
