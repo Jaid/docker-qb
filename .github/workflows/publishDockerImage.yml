@@ -16,10 +16,10 @@ jobs:
         include:
           - registry: hub.docker.com
             username: jaidchen
-            password: ${{ secrets.dockerHubToken }}
+            passwordId: dockerHubToken
           - registry: ghcr.io
             username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+            passwordId: GITHUB_TOKEN
     steps:
       - name: Set name
         id: nameSetter
@@ -34,7 +34,7 @@ jobs:
         with:
           registry: ${{ matrix.registry }}
           username: ${{ matrix.username }}
-          password: ${{ matrix.password }}
+          password: ${{ secrets[matrix.passwordId] }}
       - name: Build and push Docker to ${{ matrix.registry }}
         uses: docker/build-push-action@v3
         with:
