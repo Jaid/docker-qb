@@ -60,7 +60,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          buildContext: ${{ env.buildContext }}
+          context: ${{ env.buildContext }}
           platforms: ${{ env.arch }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
