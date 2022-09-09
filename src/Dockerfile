@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM jaidchen/ubuntu:latest
+FROM jaidchen/ubuntu:main
 
 COPY --chown=$userId:$groupId ./bin $userHome/bin
 
