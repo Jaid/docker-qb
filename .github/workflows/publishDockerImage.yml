@@ -27,7 +27,7 @@ jobs:
         run: |
           set -o errexit
           repoName=${{ github.event.repository.name }}
-          if [ ${{ matrix.registry = docker.io }} ]; then
+          if [ ${{ matrix.registry }} = docker.io ]; then
             imageNamePrefix=${{ matrix.username }}/
           else
             imageNamePrefix=
