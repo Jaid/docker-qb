@@ -15,6 +15,8 @@ ENV finishedPath=$userHome/content/finished
 ENV downloadingPath=$userHome/content/downloading
 ENV inboxPath=$userHome/content/inbox
 ENV torrentBackupPath=$userHome/content/torrentBackup
+ENV gluetunApiHost=localhost
+ENV gluetunApiPort=8000
 
 EXPOSE $webPort
 EXPOSE $directPort
