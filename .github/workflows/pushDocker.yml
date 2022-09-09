@@ -22,7 +22,7 @@ jobs:
             imageName: jaidchen/$repo
             passwordId: dockerHubToken
           - registry: ghcr.io
-            imageName: $repo
+            imageName: ${{ github.event.repository.full_name }}
             username: ${{ github.actor }}
             passwordId: GITHUB_TOKEN
     steps:
