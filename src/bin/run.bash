@@ -58,9 +58,9 @@ if [ -f "$qbittorrentConf" ]; then
   echo "$qbittorrentConf already exists, patching file"
   md5Before=$(md5sum "$qbittorrentConf")
   echo "MD5 before: $md5Before"
-  sed -i "s░^Session\\\\Port=.*$░Session\\\\Port=$gluetunForwardedPort░g" "$qbittorrentConf"
-  sed -i "s░^Session\\\\Interface=.*$░Session\\\\Interface=tunVpn░g" "$qbittorrentConf"
-  sed -i "s░^Session\\\\InterfaceName=.*$░Session\\\\InterfaceName=tunVpn░g" "$qbittorrentConf"
+  sed -i "s|^Session\\\\Port=.*$|Session\\\\Port=$gluetunForwardedPort|g" "$qbittorrentConf"
+  sed -i "s|^Session\\\\Interface=.*$|Session\\\\Interface=tunVpn|g" "$qbittorrentConf"
+  sed -i "s|^Session\\\\InterfaceName=.*$|Session\\\\InterfaceName=tunVpn|g" "$qbittorrentConf"
   md5After=$(md5sum "$qbittorrentConf")
   echo "MD5 after:  $md5After"
 else
