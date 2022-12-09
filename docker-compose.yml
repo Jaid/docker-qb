@@ -5,7 +5,7 @@ services:
     container_name: qbittorrent-nox
     restart: unless-stopped
     build:
-      context: .
+      context: src
     ports:
       - 3649:3649
       - 33333:33333
