@@ -3,5 +3,4 @@ set -o errexit
 
 here="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-}")" &>/dev/null && pwd 2>/dev/null)"
 
-source "$here/reset"
-docker compose --file "$here/../src/docker-compose.yml" up --build
+docker compose --file "$here/../docker-compose.yml" up --build "$@"

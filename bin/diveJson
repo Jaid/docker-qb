@@ -3,5 +3,6 @@ set -o errexit
 
 here="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-}")" &>/dev/null && pwd 2>/dev/null)"
 
-rm -rf "$here"/../dist
-mkdir --parents "$here"/../dist/dockerVolume/{config,content,media}
+distFolder="$here/../dist"
+mkdir --parents "$distFolder"
+bash "$here/dive" --json "$distFolder/dive.json" "$@"
