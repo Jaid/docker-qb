@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-set -o errexit
+set -o errexit -o pipefail
 
-if [ "$debugBash" ]; then
+if [[ -n "$debugBash" ]]; then
   set -o xtrace
 fi
 
@@ -16,7 +16,7 @@ function retry() {
   local delay=10
   while true; do
     "$@" && break || {
-      if [ $n -lt $max ]; then
+      if [[ $n -lt $max ]]; then
         ((n++)) || true
         echo "Command failed. Attempt $n/$max:"
         sleep $delay
@@ -29,7 +29,7 @@ function retry() {
 
 function getPublicIp() {
   gluetunIp=$(curl --retry 20 "$gluetunApiHost:$gluetunApiPort/v1/publicip/ip" | jq --raw-output .ip)
-  if [ -z "$gluetunIp" ] || [ "$gluetunIp" = "null" ]; then
+  if [[ -z $gluetunIp || $gluetunIp = null ]]; then
     return
   else
     export gluetunIp
@@ -38,7 +38,7 @@ function getPublicIp() {
 
 function getForwardedPort() {
   gluetunForwardedPort=$(curl --retry 20 "$gluetunApiHost:$gluetunApiPort/v1/openvpn/portforwarded" | jq --raw-output .port)
-  if [ -z "$gluetunForwardedPort" ] || [ "$gluetunForwardedPort" = "null" ] || [ "$gluetunForwardedPort" -eq 0 ]; then
+  if [[ -z $gluetunForwardedPort || $gluetunForwardedPort = "null" || $gluetunForwardedPort -eq 0 ]]; then
     return 1
   else
     export gluetunForwardedPort
@@ -46,7 +46,7 @@ function getForwardedPort() {
 }
 
 retry getPublicIp
-if [ -n "$gluetunIp" ]; then
+if [[ -n $gluetunIp ]]; then
   echo "Using VPN ip $gluetunIp"
 else
   echo "Could not determine public IP address using gluetun API /v1/publicip/ip"
@@ -54,7 +54,7 @@ else
 fi
 retry getForwardedPort
 echo "Dynamically setting port to $gluetunForwardedPort"
-if [ -f "$qbittorrentConf" ]; then
+if [[ -f $qbittorrentConf ]]; then
   echo "$qbittorrentConf already exists, patching file"
   md5Before=$(md5sum "$qbittorrentConf")
   echo "MD5 before: $md5Before"
