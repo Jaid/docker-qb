@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+
+  app:
+    container_name: qbittorrent-nox
+    restart: unless-stopped
+    build:
+      context: .
+    ports:
+      - 3649:3649
+      - 33333:33333
+    volumes:
+      - ./temp/volume/qBittorrent:/app/qBittorrent
+      - ./temp/volume/content:/app/content
+      - ./temp/volume/media:/app/media
