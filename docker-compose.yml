@@ -1,9 +1,8 @@
 version: "3.9"
 services:
 
-  app:
-    container_name: qbittorrent-nox
-    restart: unless-stopped
+  main:
+    container_name: qbittorrentNox-dev
     build:
       context: src
     ports:
