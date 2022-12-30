@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM debian:stable-slim AS build
+FROM ubuntu:22.04 AS build
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV qbt_libtorrent_version 2.0
@@ -11,9 +11,9 @@ ENV buildDirectory /root/qbBuild
 ADD build*.bash /bin
 RUN mkdir --parents $buildDirectory
 WORKDIR $buildDirectory
-RUN ["/bin/bash", "-o", "xtrace", "/bin/build.bash"]
-RUN ["/bin/bash", "-o", "xtrace", "/bin/build2.bash"]
-RUN ["/bin/bash", "-o", "xtrace", "/bin/build3.bash"]
+RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build.bash"]
+RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build2.bash"]
+RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build3.bash"]
 
 FROM jaidchen/ubuntu:2.2.0
 
