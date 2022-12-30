@@ -1,13 +1,19 @@
 # syntax=docker/dockerfile:1
 
-ARG ubuntuVersion=22.04
+FROM debian:stable-slim AS build
 
-FROM ubuntu:$ubuntuVersion AS build
+ENV DEBIAN_FRONTEND noninteractive
+ENV qbt_libtorrent_version 2.0
+ENV qbt_qt_version 6
+ENV qbt_build_tool cmake
+ENV buildDirectory /root/qbBuild
 
 ADD build*.bash /bin
-WORKDIR /root
-RUN ["/usr/bin/bash", "-o", "errexit", "-o", "pipefail", "-o", "xtrace", "/bin/build.bash"]
-RUN ["/usr/bin/bash", "-o", "errexit", "-o", "pipefail", "-o", "xtrace", "/bin/build2.bash"]
+RUN mkdir --parents $buildDirectory
+WORKDIR $buildDirectory
+RUN ["/bin/bash", "-o", "xtrace", "/bin/build.bash"]
+RUN ["/bin/bash", "-o", "xtrace", "/bin/build2.bash"]
+RUN ["/bin/bash", "-o", "xtrace", "/bin/build3.bash"]
 
 FROM jaidchen/ubuntu:2.2.0
 
@@ -25,7 +31,7 @@ ENV torrentBackupPath=$userHome/content/torrentBackup
 ENV gluetunApiHost=localhost
 ENV gluetunApiPort=8000
 
-COPY --from=build --chown=$userId:$groupId /root/qbStatic/qbt-build/bin/qbittorrent-nox /bin
+COPY --from=build --chown=$userId:$groupId /root/qbBuild/bin/qbittorrent-nox /bin
 
 EXPOSE $webPort
 EXPOSE $directPort
