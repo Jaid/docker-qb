@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
 
-repoSha=900dd69dcb790a008fdd33186b0e383893fc4402
+repo=dracula/qbittorrent
+repoSha=a9d64acd1faf2d23f46a98b20eba6640805a0f62
 tarFileName=dracula.tar.gz
 
 cd
-curl --location --retry 3 --fail --silent --show-error --header 'Cache-Control: no-cache' https://github.com/dracula/qbittorrent/archive/$repoSha.tar.gz --output $tarFileName
+curl --location --retry 3 --fail --silent --show-error https://github.com/$repo/archive/$repoSha.tar.gz --output $tarFileName
 tar -x -z -f $tarFileName
-mv qbittorrent-nox-static-$repoSha qbDracula
 rm $tarFileName
+mv qbittorrent-nox-static-$repoSha qbDracula
