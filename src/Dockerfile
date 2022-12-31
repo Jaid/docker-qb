@@ -14,6 +14,7 @@ WORKDIR $buildDirectory
 RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build.bash"]
 RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build2.bash"]
 RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build3.bash"]
+RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build4.bash"]
 
 FROM jaidchen/ubuntu:2.2.0
 
@@ -32,6 +33,7 @@ ENV gluetunApiHost=localhost
 ENV gluetunApiPort=8000
 
 COPY --from=build --chown=$userId:$groupId /root/qbBuild/bin/qbittorrent-nox /bin
+COPY --from=build --chown=$userId:$groupId /root/qbDracula/webui $userHome/dracula
 
 EXPOSE $webPort
 EXPOSE $directPort
