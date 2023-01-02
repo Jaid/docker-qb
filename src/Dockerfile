@@ -1,22 +1,8 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:22.04 AS build
+FROM jaidchen/builder:2.0.1-ubuntu-latest AS build
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV qbt_libtorrent_version 2.0
-ENV qbt_qt_version 6
-ENV qbt_build_tool cmake
-ENV buildDirectory /root/qbBuild
-
-ADD build*.bash /bin
-RUN mkdir --parents $buildDirectory
-WORKDIR $buildDirectory
-RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build.bash"]
-RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build2.bash"]
-RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build3.bash"]
-RUN ["/usr/bin/bash", "-o", "xtrace", "/bin/build4.bash"]
-
-FROM jaidchen/ubuntu:2.2.0
+FROM jaidchen/runner:3.0.0
 
 ENV qbittorrentFolder=$userHome/qBittorrent
 ENV qbittorrentUser=$userName
