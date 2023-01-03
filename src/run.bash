@@ -68,6 +68,7 @@ else
   limitToInterface=tunVpn
   echo "Config file $qbittorrentConf does not exist yet, will be dynamically created"
   mkdir --parents "$qbittorrentFolder/config"
+  # shellcheck disable=SC2028,SC2154
   echo "[Application]
 FileLogger\Age=1
 FileLogger\AgeType=1
@@ -174,6 +175,7 @@ Queueing\QueueingEnabled=false
 WebUI\Address=*
 WebUI\Port=$webPort
 WebUI\AlternativeUIEnabled=false
+WebUI\RootFolder=$userHome/dracula/webui
 WebUI\AuthSubnetWhitelist=@Invalid()
 WebUI\AuthSubnetWhitelistEnabled=false
 WebUI\BanDuration=3600

@@ -19,7 +19,8 @@ ENV gluetunApiHost=localhost
 ENV gluetunApiPort=8000
 
 COPY --from=build --chown=$userId:$groupId /root/qbBuild/bin/qbittorrent-nox /bin
-COPY --from=build --chown=$userId:$groupId /root/qbDracula/webui $userHome/dracula
+COPY --from=build --chown=$userId:$groupId /root/qbDracula $userHome/dracula
+RUN chmod --recursive ugo+rw $userHome/dracula
 
 EXPOSE $webPort
 EXPOSE $directPort
