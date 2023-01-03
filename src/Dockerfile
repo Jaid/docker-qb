@@ -2,7 +2,7 @@
 
 FROM jaidchen/builder:2.0.1-ubuntu-latest AS build
 
-FROM jaidchen/runner:3.0.0
+FROM jaidchen/runner:3.1.0
 
 ENV qbittorrentFolder=$userHome/qBittorrent
 ENV qbittorrentUser=$userName
