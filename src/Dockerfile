@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1
 
-FROM jaidchen/builder:main AS build
+FROM jaidchen/builder:6.0.0 AS build
 
-FROM jaidchen/runner:main
+FROM jaidchen/runner:5.0.0
 
 ENV qbittorrentFolder=$userHome/qBittorrent
 ENV qbittorrentUser=$userName
