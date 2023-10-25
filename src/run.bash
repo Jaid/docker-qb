@@ -203,4 +203,5 @@ DontConfirmAutoExit=false
   echo "MD5: $md5Sum"
 fi
 
-tini /bin/qbittorrent-nox "--profile=$HOME"
+# tini /bin/qbittorrent-nox "--profile=$HOME"
+/bin/qbittorrent-nox "--profile=$HOME"

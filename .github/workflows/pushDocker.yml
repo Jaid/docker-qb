@@ -21,6 +21,6 @@ jobs:
       matrixPlatform: linux/amd64
       testEval: status === 0 && stdout.length > 0
       versionTag: ${{ github.event.client_payload.newTag }}
-      testAppArgs: --version
+      testAppArgs: /bin/qbittorrent-nox --version
     secrets:
       dockerHubToken: ${{ secrets.dockerHubToken }}
