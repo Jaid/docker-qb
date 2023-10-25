@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
 
-if [[ -z "$libtorrentVersion" ]]; then
-  echo "libtorrentVersion environment variable must be set"
-  exit 1
-fi
-
+libtorrentVersion=${libtorrentVersion:-2.0.9}
 export DEBIAN_FRONTEND=noninteractive
 export qbt_libtorrent_version="${libtorrentVersion%.*}"
 export qbt_qt_version=6
