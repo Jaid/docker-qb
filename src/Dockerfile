@@ -1,8 +1,9 @@
 # syntax=docker/dockerfile:1
 
+ARG libtorrentVersion=2.0.9
+
 FROM jaidchen/builder:6.0.0 AS build
 
-ARG libtorrentVersion=2.0.9
 ENV libtorrentVersion=$libtorrentVersion
 
 FROM jaidchen/runner:5.0.0
