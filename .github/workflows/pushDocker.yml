@@ -19,7 +19,8 @@ jobs:
     with:
       dockerHubUser: jaidchen
       matrixPlatform: linux/amd64
-      # testEval: status === 0 && stdout.length > 0
+      testEval: status === 0 && stdout.length > 0
       versionTag: ${{ github.event.client_payload.newTag }}
+      testAppArgs: --version
     secrets:
       dockerHubToken: ${{ secrets.dockerHubToken }}
