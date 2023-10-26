@@ -22,8 +22,7 @@ jobs:
       testEval: status === 0 && stdout.length > 0
       versionTag: ${{ github.event.client_payload.newTag }}
       testAppArgs: /bin/qbittorrent-nox --version
-      buildArgs: --build-arg abc=6
       matrixAdditionEvals: |-
-        abc: 7
+        libtorrentVersion: 2.0.9
     secrets:
       dockerHubToken: ${{ secrets.dockerHubToken }}

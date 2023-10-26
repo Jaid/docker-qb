@@ -4,13 +4,8 @@ ARG abc=1
 
 FROM jaidchen/builder:6.0.0 AS build
 
-ONBUILD ARG abc=4
-ONBUILD ENV abc=5
-ARG abc=2
-ENV abc=3
 ADD ./build/contextBuild* $userHome/bin
-RUN ls -lah $userHome/bin
-RUN ["/bin/bash", "-c", "/bin/bash -o errexit -o pipefail -o xtrace ${userHome}/bin/contextBuild1.bash"]
+RUN ["/bin/bash", "-c", "/bin/bash -o errexit -o pipefail -o xtrace ${userHome}/bin/contextBuild.bash"]
 
 FROM jaidchen/runner:5.0.0
 
