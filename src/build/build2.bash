@@ -2,10 +2,11 @@
 set -o errexit -o pipefail
 
 # libtorrentVersion=${libtorrentVersion:-2.0.9}
-if [[ -z $libtorrentVersion ]]; then
-  printf >&2 'Variable $libtorrentVersion not existing\n'
+if [[ -z $abc ]]; then
+  printf >&2 'Variable $abc not existing\n'
   exit 1
 fi
+printf 'abc = %s\n' "$abc"
 
 export DEBIAN_FRONTEND=noninteractive
 export qbt_libtorrent_version="${libtorrentVersion%.*}"

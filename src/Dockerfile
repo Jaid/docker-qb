@@ -1,13 +1,13 @@
 # syntax=docker/dockerfile:1
 
-ARG libtorrentVersion=1
+ARG abc=1
 
 FROM jaidchen/builder:6.0.0 AS build
 
-ONBUILD ARG libtorrentVersion=4
-ONBUILD ENV libtorrentVersion=5
-ARG libtorrentVersion=2
-ENV libtorrentVersion=3
+ONBUILD ARG abc=4
+ONBUILD ENV abc=5
+ARG abc=2
+ENV abc=3
 
 FROM jaidchen/runner:5.0.0
 
