@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 
-ARG abc=1
-
 FROM jaidchen/builder:6.0.0 AS build
 
+ARG libtorrentVersion
+ENV libtorrentVersion=$libtorrentVersion
 ADD ./build/contextBuild* $userHome/bin
 RUN ["/bin/bash", "-c", "/bin/bash -o errexit -o pipefail -o xtrace ${userHome}/bin/contextBuild.bash"]
 
