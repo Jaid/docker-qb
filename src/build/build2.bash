@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
 
-libtorrentVersion=${libtorrentVersion:-2.0.9}
+# libtorrentVersion=${libtorrentVersion:-2.0.9}
+if [[ -z $libtorrentVersion ]]; then
+  printf >&2 'Variable $libtorrentVersion not existing\n'
+  exit 1
+fi
+
 export DEBIAN_FRONTEND=noninteractive
 export qbt_libtorrent_version="${libtorrentVersion%.*}"
 export qbt_qt_version=6
