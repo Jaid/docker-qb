@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
 
-downloadGithubArchive userdocs/qbittorrent-nox-static ~/qbStatic sha 328c9d74c7cfa13ac9a3fce1f93151ad2bd55201
+downloadGithubArchive userdocs/qbittorrent-nox-static ~/qbStatic sha edd7f8e8078bf5678b7713a2857ca76013559d6c

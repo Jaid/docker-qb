@@ -23,6 +23,6 @@ jobs:
       versionTag: ${{ github.event.client_payload.newTag }}
       testAppArgs: /bin/qbittorrent-nox --version
       matrixAdditionEvals: |-
-        libtorrentVersion: `2.0.10`
+        libtorrentVersion: `2.0.11`
     secrets:
       dockerHubToken: ${{ secrets.dockerHubToken }}
