@@ -11,5 +11,5 @@ export qbt_qt_version=6
 export qbt_build_tool=cmake
 export buildDirectory=/root/qbBuild
 
-time bash ~/qbStatic/qbittorrent-nox-static.sh all --libtorrent-tag "v$libtorrentVersion" --qbittorrent-tag master --icu --cmake --strip --build-directory "$buildDirectory"
+time bash ~/qbStatic/qbittorrent-nox-static.sh all --libtorrent-tag "v$libtorrentVersion" --qbittorrent-tag release-5.1.2 --icu --cmake --strip --build-directory "$buildDirectory"
 du -sb "$buildDirectory/bin/qbittorrent-nox"
